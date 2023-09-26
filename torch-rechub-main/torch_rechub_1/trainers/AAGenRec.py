@@ -1,5 +1,6 @@
 import math
 import torch
+import numpy as np
 
 class AcouModel:
     def AIC(self,parameter_num,epoch,t_loss,t_1_loss):
@@ -12,6 +13,11 @@ class AcouModel:
     def impact_decay(self,alpha,wi,wi_1):
         impact = wi-wi_1*math.exp(-alpha)
         return impact
+    
+    def genDifference(self, JX, JY):
+        JXY = sum([ 1 for i in range(len(JX)) if JX[i]==JY[i]])
+        deno = math.sqrt(np.dot(JX, JY))
+        return -math.log(JXY/deno)
 
     def Acou(self,parameter_num,epoch,t_loss_list,t_1_loss_list,alpha,model_name,adaptive_strategy):
         task_n = len(t_loss_list)
